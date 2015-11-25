@@ -2,23 +2,31 @@ namespace NServiceBus
 {
     using System;
     using System.Threading.Tasks;
+    using NServiceBus.Faults;
     using NServiceBus.Hosting;
     using NServiceBus.Logging;
     using NServiceBus.Pipeline;
     using NServiceBus.Pipeline.Contexts;
     using NServiceBus.Routing;
+    using NServiceBus.Settings;
     using NServiceBus.TransportDispatch;
     using NServiceBus.Transports;
 
     class MoveFaultsToErrorQueueBehavior : Behavior<TransportReceiveContext>
     {
-        public MoveFaultsToErrorQueueBehavior(CriticalError criticalError, IPipelineBase<RoutingContext> dispatchPipeline, HostInformation hostInformation, BusNotifications notifications, string errorQueueAddress)
+        public MoveFaultsToErrorQueueBehavior(CriticalError criticalError, 
+            IPipelineBase<RoutingContext> dispatchPipeline, 
+            HostInformation hostInformation, 
+            BusNotifications notifications, 
+            string errorQueueAddress,
+            string localAddress)
         {
             this.criticalError = criticalError;
             this.dispatchPipeline = dispatchPipeline;
             this.hostInformation = hostInformation;
             this.notifications = notifications;
             this.errorQueueAddress = errorQueueAddress;
+            this.localAddress = localAddress;
         }
 
         public override async Task Invoke(TransportReceiveContext context, Func<Task> next)
@@ -41,7 +49,7 @@ namespace NServiceBus
 
                     message.RevertToOriginalBodyIfNeeded();
 
-                    message.SetExceptionHeaders(exception, PipelineInfo.TransportAddress);
+                    message.SetExceptionHeaders(exception, localAddress);
 
                     message.Headers.Remove(Headers.Retries);
 
@@ -71,12 +79,26 @@ namespace NServiceBus
         HostInformation hostInformation;
         BusNotifications notifications;
         string errorQueueAddress;
+        string localAddress;
         static ILog Logger = LogManager.GetLogger<MoveFaultsToErrorQueueBehavior>();
 
         public class Registration : RegisterStep
         {
-            public Registration()
-                : base("MoveFaultsToErrorQueue", typeof(MoveFaultsToErrorQueueBehavior), "Moved failing messages to the configured error queue")
+            public Registration(ReadOnlySettings settings, string localAddress)
+                : base("MoveFaultsToErrorQueue", typeof(MoveFaultsToErrorQueueBehavior), "Moved failing messages to the configured error queue", b =>
+                {
+                    var errorQueue = ErrorQueueSettings.GetConfiguredErrorQueue(settings);
+                    var pipelinesCollection = settings.Get<PipelineConfiguration>();
+                    var dispatchPipeline = new PipelineBase<RoutingContext>(b, settings, pipelinesCollection.MainPipeline);
+
+                    return new MoveFaultsToErrorQueueBehavior(
+                        b.Build<CriticalError>(),
+                        dispatchPipeline,
+                        b.Build<HostInformation>(),
+                        b.Build<BusNotifications>(),
+                        errorQueue,
+                        localAddress);
+                })
             {
                 InsertBeforeIfExists("FirstLevelRetries");
                 InsertBeforeIfExists("SecondLevelRetries");

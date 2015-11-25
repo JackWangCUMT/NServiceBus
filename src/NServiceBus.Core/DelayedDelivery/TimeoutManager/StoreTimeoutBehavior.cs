@@ -77,18 +77,6 @@ namespace NServiceBus
             }
         }
 
-        public override Task Warmup()
-        {
-            poller.Start();
-            return base.Warmup();
-        }
-
-        public override async Task Cooldown()
-        {
-            await poller.Stop().ConfigureAwait(false);
-            await base.Cooldown().ConfigureAwait(false);
-        }
-
         ExpiredTimeoutsPoller poller;
         IDispatchMessages dispatcher;
         IPersistTimeouts persister;

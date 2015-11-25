@@ -12,7 +12,6 @@ namespace NServiceBus.Core.Tests
     using NServiceBus.Routing;
     using TransportDispatch;
     using Transports;
-    using Unicast.Transport;
     using NUnit.Framework;
 
     [TestFixture]
@@ -28,10 +27,10 @@ namespace NServiceBus.Core.Tests
                 fakeDispatchPipeline, 
                 new HostInformation(Guid.NewGuid(), "my host"),
                 new BusNotifications(), 
-                errorQueueAddress);
+                errorQueueAddress,
+                "public-receive-address");
 
             var context = CreateContext("someid");
-            behavior.Initialize(new PipelineInfo("Test", "public-receive-address"));
 
             await behavior.Invoke(context, () =>
             {
@@ -55,8 +54,8 @@ namespace NServiceBus.Core.Tests
                 fakeDispatchPipeline, 
                 new HostInformation(Guid.NewGuid(), "my host"), 
                 new BusNotifications(), 
-                "error");
-            behavior.Initialize(new PipelineInfo("Test", "public-receive-address"));
+                "error",
+                "public-receive-address");
 
             //the ex should bubble to force the transport to rollback. If not the message will be lost
             Assert.Throws<Exception>(async () => await behavior.Invoke(CreateContext("someid"), () =>
@@ -80,8 +79,8 @@ namespace NServiceBus.Core.Tests
                 fakeDispatchPipeline, 
                 hostInfo, 
                 new BusNotifications(), 
-                "error");
-            behavior.Initialize(new PipelineInfo("Test", "public-receive-address"));
+                "error",
+                "public-receive-address");
 
             await behavior.Invoke(context, () =>
             {
@@ -109,12 +108,12 @@ namespace NServiceBus.Core.Tests
                 fakeDispatchPipeline, 
                 new HostInformation(Guid.NewGuid(), "my host"),
                 notifications, 
-                "error");
+                "error",
+                "public-receive-address");
             var failedMessageNotification = new FailedMessage();
 
             notifications.Errors.MessageSentToErrorQueue += (sender, message) => failedMessageNotification = message;
 
-            behavior.Initialize(new PipelineInfo("Test", "public-receive-address"));
             await behavior.Invoke(CreateContext("someid"), () =>
             {
                 throw new Exception("testex");
