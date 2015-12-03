@@ -9,7 +9,7 @@ namespace NServiceBus.Transports
         public Sending()
         {
             EnableByDefault();
-            DependsOn<UnicastBus>();
+            DependsOn<Transport>();
         }
 
         protected internal override void Setup(FeatureConfigurationContext context)

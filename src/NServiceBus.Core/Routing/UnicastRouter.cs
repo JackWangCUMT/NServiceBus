@@ -39,7 +39,7 @@ namespace NServiceBus.Routing
             var selectedDestinations = SelectDestinationsForEachEndpoint(distributionStrategy, destinationsByEndpoint);
 
             return selectedDestinations
-                .Select(destination => new UnicastRoutingStrategy(destination.Resolve(physicalAddresses.GetTransportAddress)));
+                .Select(destination => new UnicastRoutingStrategy(destination.Resolve(i => physicalAddresses.GetTransportAddress(new LogicalAddress(i)))));
         }
 
         static IEnumerable<UnicastRoutingTarget> SelectDestinationsForEachEndpoint(DistributionStrategy distributionStrategy, IEnumerable<IGrouping<Endpoint, UnicastRoutingTarget>> destinationsByEndpoint)

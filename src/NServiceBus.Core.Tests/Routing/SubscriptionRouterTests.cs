@@ -11,7 +11,7 @@ namespace NServiceBus.Core.Tests.Routing
         [Test]
         public void Should_return_empty_list_for_events_with_no_routes()
         {
-            var router = new SubscriptionRouter(new Publishers(), new EndpointInstances(), new TransportAddresses());
+            var router = new SubscriptionRouter(new Publishers(), new EndpointInstances(), new TransportAddresses(address => null));
             Assert.IsEmpty(router.GetAddressesForEventType(typeof(Message1)));
         }
      
@@ -32,8 +32,8 @@ namespace NServiceBus.Core.Tests.Routing
             publishers.AddStatic(inheritedEndpoint, inheritedType );
             var knownEndpoints = new EndpointInstances();
             knownEndpoints.AddDynamic(e => new [] { new EndpointInstance(e, null, null) });
-            var physicalAddresses = new TransportAddresses();
-            physicalAddresses.AddRule(i => i.Endpoint.ToString());
+            var physicalAddresses = new TransportAddresses(address => null);
+            physicalAddresses.AddRule(i => i.EndpointInstance.Endpoint.ToString());
             var router = new SubscriptionRouter(publishers, knownEndpoints, physicalAddresses);
 
             Assert.Contains(baseAddress, router.GetAddressesForEventType(baseType).ToList());
@@ -56,8 +56,8 @@ namespace NServiceBus.Core.Tests.Routing
             publishers.AddStatic(inheritedEndpoint, inheritedType);
             var knownEndpoints = new EndpointInstances();
             knownEndpoints.AddDynamic(e => new[] { new EndpointInstance(e, null, null) });
-            var physicalAddresses = new TransportAddresses();
-            physicalAddresses.AddRule(i => i.Endpoint.ToString());
+            var physicalAddresses = new TransportAddresses(address => null);
+            physicalAddresses.AddRule(i => i.EndpointInstance.Endpoint.ToString());
             var router = new SubscriptionRouter(publishers, knownEndpoints, physicalAddresses);
 
             Assert.AreEqual(2, router.GetAddressesForEventType(baseType).Count());

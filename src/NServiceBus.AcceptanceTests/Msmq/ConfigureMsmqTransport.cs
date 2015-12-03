@@ -14,6 +14,7 @@ public class ConfigureMsmqTransport
     public Task Configure(BusConfiguration configuration)
     {
         busConfiguration = configuration;
+        busConfiguration.UseTransport<MsmqTransport>();
         return Task.FromResult(0);
     }
 

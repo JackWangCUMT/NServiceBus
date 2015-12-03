@@ -147,6 +147,7 @@
     <Compile Include="Transports\Msmq\TimeToBeReceivedOverrideCheck.cs" />
     <Compile Include="Transports\Msmq\TimeToBeReceivedOverrideChecker.cs" />
     <Compile Include="Transports\StartupCheckResult.cs" />
+    <Compile Include="Transports\Transport.cs" />
     <Compile Include="Transports\TransportReceivingConfigurationResult.cs" />
     <Compile Include="Transports\TransportSendingConfigurationResult.cs" />
     <Compile Include="UnicastRoutingTarget.cs" />
@@ -355,7 +356,6 @@
     <Compile Include="Transports\OutboundRoutingPolicy.cs" />
     <Compile Include="Transports\OutboundRoutingType.cs" />
     <Compile Include="Transports\PushRuntimeSettings.cs" />
-    <Compile Include="Transports\LogicalToTransportAddressTranslation.cs" />
     <Compile Include="Transports\Msmq\MsmqLabelGenerator.cs" />
     <Compile Include="Transports\ICancelDeferredMessages.cs" />
     <Compile Include="Transports\Msmq\MsmqAddress.cs" />

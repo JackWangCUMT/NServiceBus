@@ -18,7 +18,7 @@
         {
             return publishers
                 .GetPublisherFor(messageType).SelectMany(p => p
-                    .Resolve(e => endpointInstances.FindInstances(e), i => physicalAddresses.GetTransportAddress(i)));
+                    .Resolve(e => endpointInstances.FindInstances(e), i => physicalAddresses.GetTransportAddress(new LogicalAddress(i))));
         }
 
         Publishers publishers;
