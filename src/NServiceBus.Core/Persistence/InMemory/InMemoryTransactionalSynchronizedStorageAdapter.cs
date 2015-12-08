@@ -1,6 +1,8 @@
 namespace NServiceBus
 {
+    using System.Threading.Tasks;
     using System.Transactions;
+    using NServiceBus.Extensibility;
     using NServiceBus.InMemory.Outbox;
     using NServiceBus.Outbox;
     using NServiceBus.Persistence;
@@ -8,19 +10,19 @@ namespace NServiceBus
 
     class InMemoryTransactionalSynchronizedStorageAdapter : ISynchronizedStorageAdapter
     {
-        public bool TryAdapt(OutboxTransaction transaction, out CompletableSynchronizedStorageSession session)
+        public Task<bool> TryAdapt(OutboxTransaction transaction, ContextBag context, out CompletableSynchronizedStorageSession session)
         {
             var inMemOutboxTransaction = transaction as InMemoryOutboxTransaction;
             if (inMemOutboxTransaction != null)
             {
                 session = new InMemorySynchronizedStorageSession(inMemOutboxTransaction.Transaction);
-                return true;
+                return Task.FromResult(true);
             }
             session = null;
-            return false;
+            return Task.FromResult(false);
         }
 
-        public bool TryAdapt(TransportTransaction transportTransaction, out CompletableSynchronizedStorageSession session)
+        public Task<bool> TryAdapt(TransportTransaction transportTransaction, ContextBag context, out CompletableSynchronizedStorageSession session)
         {
             Transaction ambientTransaction;
             
@@ -29,10 +31,10 @@ namespace NServiceBus
                 var transaction = new InMemoryTransaction();
                 session = new InMemorySynchronizedStorageSession(transaction);
                 ambientTransaction.EnlistVolatile(new EnlistmentNotification(transaction), EnlistmentOptions.None);
-                return true;
+                return Task.FromResult(true);
             }
             session = null;
-            return false;
+            return Task.FromResult(false);
         }
 
         private class EnlistmentNotification : IEnlistmentNotification

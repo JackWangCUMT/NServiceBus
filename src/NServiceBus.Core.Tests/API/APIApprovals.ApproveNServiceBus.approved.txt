@@ -1873,8 +1873,8 @@ namespace NServiceBus.Persistence
     }
     public interface ISynchronizedStorageAdapter
     {
-        bool TryAdapt(NServiceBus.Outbox.OutboxTransaction transaction, out NServiceBus.Persistence.CompletableSynchronizedStorageSession session);
-        bool TryAdapt(NServiceBus.Transports.TransportTransaction transportTransaction, out NServiceBus.Persistence.CompletableSynchronizedStorageSession session);
+        System.Threading.Tasks.Task<bool> TryAdapt(NServiceBus.Outbox.OutboxTransaction transaction, NServiceBus.Extensibility.ContextBag context, out NServiceBus.Persistence.CompletableSynchronizedStorageSession session);
+        System.Threading.Tasks.Task<bool> TryAdapt(NServiceBus.Transports.TransportTransaction transportTransaction, NServiceBus.Extensibility.ContextBag context, out NServiceBus.Persistence.CompletableSynchronizedStorageSession session);
     }
     public abstract class PersistenceDefinition
     {

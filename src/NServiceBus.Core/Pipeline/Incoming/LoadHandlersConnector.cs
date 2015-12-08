@@ -52,12 +52,13 @@
             }
         }
 
-        Task<CompletableSynchronizedStorageSession> AdaptOrOpenNewSynchronizedStorageSession(TransportTransaction transportTransaction, OutboxTransaction outboxTransaction, ContextBag contextBag)
+        async Task<CompletableSynchronizedStorageSession> AdaptOrOpenNewSynchronizedStorageSession(TransportTransaction transportTransaction, OutboxTransaction outboxTransaction, ContextBag contextBag)
         {
             CompletableSynchronizedStorageSession session;
-            return adapter.TryAdapt(transportTransaction, out session) || adapter.TryAdapt(outboxTransaction, out session)
-                ? Task.FromResult(session)
-                : synchronizedStorage.OpenSession(contextBag);
+
+            return await adapter.TryAdapt(outboxTransaction, contextBag, out session) || await adapter.TryAdapt(transportTransaction, contextBag, out session)
+                ? session
+                : await synchronizedStorage.OpenSession(contextBag);
         }
 
 
