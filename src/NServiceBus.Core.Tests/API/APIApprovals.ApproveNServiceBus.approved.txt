@@ -306,14 +306,19 @@ namespace NServiceBus
     }
     public sealed class EndpointInstance
     {
-        public EndpointInstance(string endpoint, string userDiscriminator, string transportDiscriminator) { }
-        public EndpointInstance(NServiceBus.Endpoint endpoint, string userDiscriminator, string transportDiscriminator) { }
+        public EndpointInstance(string endpoint, string scaleOutDiscriminator = null, System.Collections.Generic.IReadOnlyDictionary<string, string> properties = null) { }
+        public EndpointInstance(NServiceBus.Endpoint endpoint, string scaleOutDiscriminator = null, System.Collections.Generic.IReadOnlyDictionary<string, string> properties = null) { }
         public NServiceBus.Endpoint Endpoint { get; }
-        public string TransportDiscriminator { get; }
-        public string UserDiscriminator { get; }
+        public System.Collections.Generic.IReadOnlyDictionary<string, string> Properties { get; }
+        public string ScaleOutDiscriminator { get; }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
+        public NServiceBus.EndpointInstance SetProperty(string key, string value) { }
         public override string ToString() { }
+    }
+    public class static EndpointInstanceExtensions
+    {
+        public static NServiceBus.EndpointInstance AtMachine(this NServiceBus.EndpointInstance instance, string machineName) { }
     }
     [System.AttributeUsageAttribute(System.AttributeTargets.Class | System.AttributeTargets.Interface | System.AttributeTargets.All)]
     public sealed class ExpressAttribute : System.Attribute
@@ -336,12 +341,13 @@ namespace NServiceBus
     }
     public class static FileBasedRoutingConfigurationExtensions
     {
-        public static NServiceBus.FileRoutingTableSettings UseFileBasedEndpointInstanceLists(this NServiceBus.RoutingSettings config) { }
+        public static NServiceBus.FileRoutingTableSettings UseFileBasedEndpointInstanceMapping(this NServiceBus.RoutingSettings config, string filePath) { }
     }
     public class FileRoutingTableSettings : NServiceBus.Configuration.AdvanceExtensibility.ExposeSettings
     {
         public FileRoutingTableSettings(NServiceBus.Settings.SettingsHolder settings) { }
-        public void LookForFilesIn(string path) { }
+        public NServiceBus.FileRoutingTableSettings MaxLoadAttempts(int maxLoadAttempts) { }
+        public NServiceBus.FileRoutingTableSettings RefreshInterval(System.TimeSpan refreshInterval) { }
     }
     public class FileShareDataBus : NServiceBus.DataBus.DataBusDefinition
     {
@@ -758,9 +764,9 @@ namespace NServiceBus
         public MsmqTransport() { }
         public override string ExampleConnectionStringForErrorMessage { get; }
         public override bool RequiresConnectionString { get; }
+        public override NServiceBus.EndpointInstance BindToLocalEndpoint(NServiceBus.EndpointInstance instance, NServiceBus.Settings.ReadOnlySettings settings) { }
         protected internal override NServiceBus.Transports.TransportReceivingConfigurationResult ConfigureForReceiving(NServiceBus.Transports.TransportReceivingConfigurationContext context) { }
         protected internal override NServiceBus.Transports.TransportSendingConfigurationResult ConfigureForSending(NServiceBus.Transports.TransportSendingConfigurationContext context) { }
-        public override string GetDiscriminatorForThisEndpointInstance(NServiceBus.Settings.ReadOnlySettings settings) { }
         public override NServiceBus.Transports.OutboundRoutingPolicy GetOutboundRoutingPolicy(NServiceBus.Settings.ReadOnlySettings settings) { }
         public override NServiceBus.Transports.IManageSubscriptions GetSubscriptionManager() { }
         public override System.Collections.Generic.IEnumerable<System.Type> GetSupportedDeliveryConstraints() { }
@@ -2553,12 +2559,17 @@ namespace NServiceBus.Settings
     }
     public class ScaleOutSettings
     {
+        public void UniqueInstanceDiscriminator(string discriminator) { }
+        [System.ObsoleteAttribute("Not required any more as for MSMQ that behavior is default and for other transpor" +
+            "ts the unique instance ID has be provided. Will be removed in version 7.0.0.", true)]
         public void UniqueQueuePerEndpointInstance() { }
+        [System.ObsoleteAttribute("Please use `ScaleOutSettings.UniqueInstanceDiscriminator()` instead. Will be remo" +
+            "ved in version 7.0.0.", true)]
         public void UniqueQueuePerEndpointInstance(string discriminator) { }
         [System.ObsoleteAttribute("This is the default starting with V6. Will be removed in version 7.0.0.", true)]
         public void UseSingleBrokerQueue() { }
-        [System.ObsoleteAttribute("Please use `UniqueQueuePerEndpointInstance` instead. Will be removed in version 7" +
-            ".0.0.", true)]
+        [System.ObsoleteAttribute("Not required any more as for MSMQ that behavior is default and for other transpor" +
+            "ts the unique instance ID has be provided. Will be removed in version 7.0.0.", true)]
         public void UseUniqueBrokerQueuePerMachine() { }
     }
     public class SettingsHolder : NServiceBus.Settings.ReadOnlySettings
@@ -2823,9 +2834,9 @@ namespace NServiceBus.Transports
         public bool HasSupportForMultiQueueNativeTransactions { get; set; }
         public bool RequireOutboxConsent { get; set; }
         public virtual bool RequiresConnectionString { get; }
+        public abstract NServiceBus.EndpointInstance BindToLocalEndpoint(NServiceBus.EndpointInstance instance, NServiceBus.Settings.ReadOnlySettings settings);
         protected internal abstract NServiceBus.Transports.TransportReceivingConfigurationResult ConfigureForReceiving(NServiceBus.Transports.TransportReceivingConfigurationContext context);
         protected internal abstract NServiceBus.Transports.TransportSendingConfigurationResult ConfigureForSending(NServiceBus.Transports.TransportSendingConfigurationContext context);
-        public abstract string GetDiscriminatorForThisEndpointInstance(NServiceBus.Settings.ReadOnlySettings settings);
         public abstract NServiceBus.Transports.OutboundRoutingPolicy GetOutboundRoutingPolicy(NServiceBus.Settings.ReadOnlySettings settings);
         public abstract NServiceBus.Transports.IManageSubscriptions GetSubscriptionManager();
         public abstract System.Collections.Generic.IEnumerable<System.Type> GetSupportedDeliveryConstraints();

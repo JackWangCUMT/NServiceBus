@@ -1012,8 +1012,26 @@ namespace NServiceBus.Settings
         [ObsoleteEx(
             TreatAsErrorFromVersion = "6",
             RemoveInVersion = "7",
-            ReplacementTypeOrMember = "UniqueQueuePerEndpointInstance")]
+            Message = "Not required any more as for MSMQ that behavior is default and for other transports the unique instance ID has be provided.")]
         public void UseUniqueBrokerQueuePerMachine()
+        {
+            throw new NotImplementedException();
+        }
+
+        [ObsoleteEx(
+            TreatAsErrorFromVersion = "6",
+            RemoveInVersion = "7",
+            Message = "Not required any more as for MSMQ that behavior is default and for other transports the unique instance ID has be provided.")]
+        public void UniqueQueuePerEndpointInstance()
+        {
+            throw new NotImplementedException();
+        }
+
+        [ObsoleteEx(
+            TreatAsErrorFromVersion = "6",
+            RemoveInVersion = "7",
+            ReplacementTypeOrMember = "ScaleOutSettings.UniqueInstanceDiscriminator()")]
+        public void UniqueQueuePerEndpointInstance(string discriminator)
         {
             throw new NotImplementedException();
         }

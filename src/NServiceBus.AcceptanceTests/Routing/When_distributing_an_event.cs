@@ -104,7 +104,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.EndpointName("DistributingAnEvent.SubscriberA");
-                    c.ScaleOut().UniqueQueuePerEndpointInstance("1");
+                    c.ScaleOut().UniqueInstanceDiscriminator("1");
 
                     var publisher = new Endpoint("DistributingAnEvent.Publisher");
                     c.Pubishers().AddStatic(publisher, typeof(MyEvent));
@@ -131,7 +131,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.EndpointName("DistributingAnEvent.SubscriberA");
-                    c.ScaleOut().UniqueQueuePerEndpointInstance("2");
+                    c.ScaleOut().UniqueInstanceDiscriminator("2");
                     
                     var publisher = new Endpoint("DistributingAnEvent.Publisher");
                     c.Pubishers().AddStatic(publisher, typeof(MyEvent));
@@ -158,7 +158,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.EndpointName("DistributingAnEvent.SubscriberB");
-                    c.ScaleOut().UniqueQueuePerEndpointInstance("1");
+                    c.ScaleOut().UniqueInstanceDiscriminator("1");
                     
                     var publisher = new Endpoint("DistributingAnEvent.Publisher");
                     c.Pubishers().AddStatic(publisher, typeof(MyEvent));
@@ -184,7 +184,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.EndpointName("DistributingAnEvent.SubscriberB");
-                    c.ScaleOut().UniqueQueuePerEndpointInstance("2");
+                    c.ScaleOut().UniqueInstanceDiscriminator("2");
                     
                     var publisher = new Endpoint("DistributingAnEvent.Publisher");
                     c.Pubishers().AddStatic(publisher, typeof(MyEvent));

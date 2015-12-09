@@ -50,7 +50,7 @@
                 throw new NotImplementedException();
             }
 
-            public override string GetDiscriminatorForThisEndpointInstance(ReadOnlySettings settings)
+            public override EndpointInstance BindToLocalEndpoint(EndpointInstance instance, ReadOnlySettings settings)
             {
                 throw new NotImplementedException();
             }
