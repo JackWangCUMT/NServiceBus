@@ -33,7 +33,7 @@ namespace NServiceBus.Features
 
             protected override Task OnStart(IBusContext contexts)
             {
-                settings.Get<EndpointInstances>().AddDynamic(e => routingTable.GetInstances(e));
+                settings.Get<EndpointInstances>().AddDynamic(e => Task.FromResult(routingTable.GetInstances(e)));
                 return TaskEx.Completed;
             }
         }

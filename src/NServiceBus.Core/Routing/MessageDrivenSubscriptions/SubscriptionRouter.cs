@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
     using NServiceBus.Transports;
 
     class SubscriptionRouter
@@ -14,11 +14,16 @@
             this.physicalAddresses = physicalAddresses;
         }
 
-        public IEnumerable<string> GetAddressesForEventType(Type messageType)
+        public async Task<IEnumerable<string>> GetAddressesForEventType(Type messageType)
         {
-            return publishers
-                .GetPublisherFor(messageType).SelectMany(p => p
-                    .Resolve(e => endpointInstances.FindInstances(e), i => physicalAddresses.GetTransportAddress(i)));
+            var results = new List<string>();
+            foreach (var publisherAddress in publishers.GetPublisherFor(messageType))
+            {
+                results.AddRange(await publisherAddress.Resolve(
+                    async e => await endpointInstances.FindInstances(e).ConfigureAwait(false), 
+                    i => physicalAddresses.GetTransportAddress(i)));
+            }
+            return results;
         }
 
         Publishers publishers;

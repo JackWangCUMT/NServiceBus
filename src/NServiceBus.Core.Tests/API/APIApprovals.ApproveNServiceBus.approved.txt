@@ -2097,12 +2097,12 @@ namespace NServiceBus.Routing
     public class EndpointInstances
     {
         public EndpointInstances() { }
-        public void AddDynamic(System.Func<NServiceBus.Endpoint, System.Collections.Generic.IEnumerable<NServiceBus.EndpointInstance>> dynamicRule) { }
+        public void AddDynamic(System.Func<NServiceBus.Endpoint, System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NServiceBus.EndpointInstance>>> dynamicRule) { }
         public void AddStatic(NServiceBus.Endpoint endpoint, params NServiceBus.EndpointInstance[] instances) { }
     }
     public interface IUnicastRoute
     {
-        System.Collections.Generic.IEnumerable<NServiceBus.UnicastRoutingTarget> Resolve(System.Func<NServiceBus.Endpoint, System.Collections.Generic.IEnumerable<NServiceBus.EndpointInstance>> instanceResolver);
+        System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NServiceBus.UnicastRoutingTarget>> Resolve(System.Func<NServiceBus.Endpoint, System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NServiceBus.EndpointInstance>>> instanceResolver);
     }
     public class MulticastAddressTag : NServiceBus.Routing.AddressTag
     {

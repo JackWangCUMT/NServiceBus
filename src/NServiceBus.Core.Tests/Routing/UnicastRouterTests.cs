@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using NServiceBus.Extensibility;
     using NServiceBus.Routing;
     using NServiceBus.Transports;
@@ -60,7 +61,7 @@
             routingTable.RouteToEndpoint(typeof(Event), shipping);
 
             endpointInstances.AddStatic(sales, new EndpointInstance(sales, "1", null));
-            endpointInstances.AddDynamic(e => new[] { new EndpointInstance(sales, "2", null)});
+            endpointInstances.AddDynamic(e => Task.FromResult(EnumerableEx.Single(new EndpointInstance(sales, "2", null))));
             endpointInstances.AddStatic(shipping, new EndpointInstance(shipping, "1", null), new EndpointInstance(shipping, "2", null));
 
             transportAddresses.AddRule(i => i.ToString());

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using NServiceBus.Routing;
     using NUnit.Framework;
 
@@ -17,32 +18,32 @@
         }
 
         [Test]
-        public void Should_return_instances_configured_by_static_route()
+        public async Task Should_return_instances_configured_by_static_route()
         {
             var instances = new EndpointInstances();
             var sales = new Endpoint("Sales");
             instances.AddStatic(sales, new EndpointInstance(sales, "1", null), new EndpointInstance(sales, "2", null));
 
-            var salesInstances = instances.FindInstances(sales).ToList();
+            var salesInstances = (await instances.FindInstances(sales)).ToList();
             Assert.AreEqual(2, salesInstances.Count);
         }
 
         [Test]
-        public void Should_filter_out_duplicate_instances()
+        public async Task Should_filter_out_duplicate_instances()
         {
             var instances = new EndpointInstances();
             var sales = new Endpoint("Sales");
             instances.AddStatic(sales, new EndpointInstance(sales, "dup", null), new EndpointInstance(sales, "dup", null));
 
-            var salesInstances = instances.FindInstances(sales).ToList();
+            var salesInstances = (await instances.FindInstances(sales)).ToList();
             Assert.AreEqual(1, salesInstances.Count);
         }
 
         [Test]
-        public void Should_default_to_single_instance_when_not_configured()
+        public async Task Should_default_to_single_instance_when_not_configured()
         {
             var instances = new EndpointInstances();
-            var salesInstances = instances.FindInstances(new Endpoint("Sales")).ToArray();
+            var salesInstances = (await instances.FindInstances(new Endpoint("Sales"))).ToArray();
             Assert.AreEqual(1, salesInstances.Length);
             Assert.IsNull(salesInstances[0].UserDiscriminator);
             Assert.IsNull(salesInstances[0].TransportDiscriminator);
