@@ -15,17 +15,15 @@
         /// </summary>
         /// <param name="transaction">Outbox transaction.</param>
         /// <param name="context">Context.</param>
-        /// <param name="session">Session or null, if unable to adapt.</param>
-        /// <returns></returns>
-        Task<bool> TryAdapt(OutboxTransaction transaction, ContextBag context, out CompletableSynchronizedStorageSession session);
+        /// <returns>Session or null, if unable to adapt.</returns>
+        Task<CompletableSynchronizedStorageSession> TryAdapt(OutboxTransaction transaction, ContextBag context);
 
         /// <summary>
         /// Returns a synchronized storage session based on the outbox transaction if possible. 
         /// </summary>
         /// <param name="transportTransaction">Transport transaction.</param>
         /// <param name="context">Context.</param>
-        /// <param name="session">Session or null, if unable to adapt.</param>
-        /// <returns></returns>
-        Task<bool> TryAdapt(TransportTransaction transportTransaction, ContextBag context, out CompletableSynchronizedStorageSession session);
+        /// <returns>Session or null, if unable to adapt.</returns>
+        Task<CompletableSynchronizedStorageSession> TryAdapt(TransportTransaction transportTransaction, ContextBag context);
     }
 }

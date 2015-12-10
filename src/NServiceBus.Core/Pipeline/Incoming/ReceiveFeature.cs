@@ -48,16 +48,14 @@
 
         class NoOpAdaper : ISynchronizedStorageAdapter
         {
-            public Task<bool> TryAdapt(OutboxTransaction transaction, ContextBag context, out CompletableSynchronizedStorageSession session)
+            public Task<CompletableSynchronizedStorageSession> TryAdapt(OutboxTransaction transaction, ContextBag context)
             {
-                session = null;
-                return Task.FromResult(false);
+                return Task.FromResult<CompletableSynchronizedStorageSession>(null);
             }
 
-            public Task<bool> TryAdapt(TransportTransaction transportTransaction, ContextBag context, out CompletableSynchronizedStorageSession session)
+            public Task<CompletableSynchronizedStorageSession> TryAdapt(TransportTransaction transportTransaction, ContextBag context)
             {
-                session = null;
-                return Task.FromResult(false);
+                return Task.FromResult<CompletableSynchronizedStorageSession>(null);
             }
         }
 
