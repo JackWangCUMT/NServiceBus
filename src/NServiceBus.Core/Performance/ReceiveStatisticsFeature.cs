@@ -32,13 +32,13 @@
             protected override Task OnStart(IBusContext context)
             {
                 behavior.Warmup();
-                return Task.FromResult(0);
+                return TaskEx.Completed;
             }
 
             protected override Task OnStop(IBusContext context)
             {
                 behavior.Cooldown();
-                return Task.FromResult(0);
+                return TaskEx.Completed;
             }
         }
     }

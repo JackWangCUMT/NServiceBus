@@ -15,7 +15,7 @@ namespace NServiceBus.Features
         protected override Task OnStart(IBusContext context)
         {
             poller.Start();
-            return Task.FromResult(0);
+            return TaskEx.Completed;
         }
 
         protected override Task OnStop(IBusContext context)
