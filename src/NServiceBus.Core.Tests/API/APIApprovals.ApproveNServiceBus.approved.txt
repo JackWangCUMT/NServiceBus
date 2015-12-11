@@ -1949,6 +1949,8 @@ namespace NServiceBus.Pipeline
         public NServiceBus.Pipeline.StepRegistrationSequence Register(string stepId, System.Type behavior, string description) { }
         public NServiceBus.Pipeline.StepRegistrationSequence Register<T>(string stepId, System.Func<NServiceBus.ObjectBuilder.IBuilder, T> factoryMethod, string description)
             where T : NServiceBus.Pipeline.IBehavior { }
+        public NServiceBus.Pipeline.StepRegistrationSequence Register<T>(string stepId, T behavior, string description)
+            where T : NServiceBus.Pipeline.IBehavior { }
         public NServiceBus.Pipeline.StepRegistrationSequence Register(NServiceBus.Pipeline.WellKnownStep wellKnownStep, System.Type behavior, string description) { }
         public void Register<TRegisterStep>()
             where TRegisterStep : NServiceBus.Pipeline.RegisterStep, new () { }

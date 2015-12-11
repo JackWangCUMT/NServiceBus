@@ -102,6 +102,24 @@ namespace NServiceBus.Pipeline
 
             AddStep(RegisterStep.Create(stepId, typeof(T), description, b => factoryMethod(b)));
             return new StepRegistrationSequence(AddStep);
+        } 
+        
+        /// <summary>
+        /// Register a new step into the pipeline.
+        /// </summary>
+        /// <param name="stepId">The identifier of the new step to add.</param>
+        /// <param name="behavior">The behavior instance.</param>
+        /// <param name="description">The description of the behavior.</param>
+        public StepRegistrationSequence Register<T>(string stepId, T behavior, string description)
+            where T : IBehavior
+        {
+            BehaviorTypeChecker.ThrowIfInvalid(typeof(T), "behavior");
+
+            Guard.AgainstNullAndEmpty("stepId", stepId);
+            Guard.AgainstNullAndEmpty("description", description);
+
+            AddStep(RegisterStep.Create(stepId, typeof(T), description, _ => behavior));
+            return new StepRegistrationSequence(AddStep);
         }
 
         /// <summary>

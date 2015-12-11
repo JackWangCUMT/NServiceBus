@@ -15,7 +15,7 @@
 
             context.Pipeline.Register("ReceivePerformanceDiagnosticsBehavior", _ => performanceDiagnosticsBehavior, "Provides various performance counters for receive statistics");
             context.Pipeline.Register<ProcessingStatisticsBehavior.Registration>();
-            context.Pipeline.Register("AuditProcessingStatistics", _ => new AuditProcessingStatisticsBehavior(), "Add ProcessingStarted and ProcessingEnded headers");
+            context.Pipeline.Register("AuditProcessingStatistics", new AuditProcessingStatisticsBehavior(), "Add ProcessingStarted and ProcessingEnded headers");
 
             context.RegisterStartupTask(new WarmupCooldownTask(performanceDiagnosticsBehavior));
         }
