@@ -9,7 +9,7 @@
     public class EndpointInstancesTests
     {
         [Test]
-        public void Should_throw_when_trying_to_configure_instances_that_don_not_match_endpoint_name()
+        public void Should_throw_when_trying_to_configure_instances_that_do_not_match_endpoint_name()
         {
             var instances = new EndpointInstances();
             TestDelegate action = () => instances.AddStatic(new Endpoint("Sales"), new EndpointInstance(new Endpoint("A")));

@@ -48,19 +48,19 @@ namespace NServiceBus
         {
             var doc = await ReadFileWithRetries().ConfigureAwait(false);
             var instances = parser.Parse(doc);
-            var newInsatnceMap = new Dictionary<Endpoint, HashSet<EndpointInstance>>();
+            var newInstanceMap = new Dictionary<Endpoint, HashSet<EndpointInstance>>();
 
             foreach (var i in instances)
             {
                 HashSet<EndpointInstance> instancesOfThisEndpoint;
-                if (!newInsatnceMap.TryGetValue(i.Endpoint, out instancesOfThisEndpoint))
+                if (!newInstanceMap.TryGetValue(i.Endpoint, out instancesOfThisEndpoint))
                 {
                     instancesOfThisEndpoint = new HashSet<EndpointInstance>();
-                    newInsatnceMap[i.Endpoint] = instancesOfThisEndpoint;
+                    newInstanceMap[i.Endpoint] = instancesOfThisEndpoint;
                 }
                 instancesOfThisEndpoint.Add(i);
             }
-            instanceMap = newInsatnceMap;
+            instanceMap = newInstanceMap;
         }
 
         async Task<XDocument> ReadFileWithRetries()
@@ -88,7 +88,7 @@ namespace NServiceBus
                         throw;
                     }
                 }
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
             }
         }
 

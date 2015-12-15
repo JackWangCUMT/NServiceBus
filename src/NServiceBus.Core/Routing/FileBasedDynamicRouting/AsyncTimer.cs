@@ -20,7 +20,7 @@ namespace NServiceBus
                 {
                     try
                     {
-                        await Task.Delay(interval, token);
+                        await Task.Delay(interval, token).ConfigureAwait(false);
                         await callback().ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)

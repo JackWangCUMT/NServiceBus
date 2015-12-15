@@ -78,7 +78,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.EndpointName("DistributingACommand.Receiver");
-                    c.ScaleOut().UniqueInstanceDiscriminator("1");
+                    c.ScaleOut().InstanceDiscriminator("1");
                 });
             }
 
@@ -101,7 +101,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.EndpointName("DistributingACommand.Receiver");
-                    c.ScaleOut().UniqueInstanceDiscriminator("2");
+                    c.ScaleOut().InstanceDiscriminator("2");
                 });
             }
 

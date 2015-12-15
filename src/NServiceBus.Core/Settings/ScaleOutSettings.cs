@@ -16,7 +16,7 @@ namespace NServiceBus.Settings
         /// Makes sure that each instance of this endpoint gets a unique queue based on the user-provided discriminator.
         /// </summary>
         /// <param name="discriminator">The discriminator to use.</param>
-        public void UniqueInstanceDiscriminator(string discriminator)
+        public void InstanceDiscriminator(string discriminator)
         {
             Guard.AgainstNullAndEmpty(nameof(discriminator), discriminator);
 

@@ -24,7 +24,7 @@
         /// Creates a new endpoint name for a given discriminator.
         /// </summary>
         /// <param name="endpoint">The name of the endpoint.</param>
-        /// <param name="scaleOutDiscriminator">A specific discriminator for scale-out purposeses.</param>
+        /// <param name="scaleOutDiscriminator">A specific discriminator for scale-out purposes.</param>
         /// <param name="properties">A bag of additional properties that differentiate this endpoint instance from other instances.</param>
         public EndpointInstance(string endpoint, string scaleOutDiscriminator = null, IReadOnlyDictionary<string, string> properties = null)
             : this(new Endpoint(endpoint), scaleOutDiscriminator, properties)
@@ -35,7 +35,7 @@
         /// Creates a new endpoint name for a given discriminator.
         /// </summary>
         /// <param name="endpoint">The name of the endpoint.</param>
-        /// <param name="scaleOutDiscriminator">A specific discriminator for scale-out purposeses.</param>
+        /// <param name="scaleOutDiscriminator">A specific discriminator for scale-out purposes.</param>
         /// <param name="properties">A bag of additional properties that differentiate this endpoint instance from other instances.</param>
         public EndpointInstance(Endpoint endpoint, string scaleOutDiscriminator = null, IReadOnlyDictionary<string, string> properties = null)
         {
