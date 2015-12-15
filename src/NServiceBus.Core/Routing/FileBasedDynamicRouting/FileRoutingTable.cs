@@ -7,6 +7,7 @@ namespace NServiceBus
     using System.Xml.Linq;
     using NServiceBus.Features;
     using NServiceBus.Logging;
+    using NServiceBus.Routing;
     using NServiceBus.Settings;
 
     class FileRoutingTable : FeatureStartupTask
@@ -33,7 +34,7 @@ namespace NServiceBus
             this.maxLoadAttempts = maxLoadAttempts;
         }
 
-        protected override async Task OnStart(IBusContext context)
+        protected override async Task OnStart(IBusSession context)
         {
             var endpointInstances = settings.Get<EndpointInstances>();
             endpointInstances.AddDynamic(FindInstances);
@@ -101,7 +102,7 @@ namespace NServiceBus
             return Enumerable.Empty<EndpointInstance>();
         }
 
-        protected override Task OnStop(IBusContext context)
+        protected override Task OnStop(IBusSession context)
         {
             return timer.Stop();
         }

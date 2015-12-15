@@ -1,4 +1,4 @@
-namespace NServiceBus.Routing
+namespace NServiceBus
 {
     using System.IO;
     using System.Threading.Tasks;
